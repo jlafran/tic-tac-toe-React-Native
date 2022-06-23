@@ -18,7 +18,6 @@ const emptyMap = [
 ];
 
 const copyArray = (original) => {
-  console.log("ghe");
   console.log(original);
   const copy = original.map((arr) => {
     return arr.slice();
@@ -30,13 +29,12 @@ const copyArray = (original) => {
 export default function App() {
   const [map, setMap] = useState(emptyMap);
   const [currentTurn, setCurrentTurn] = useState("x");
-  const [gameMode, setGameMode] = useState("BOT_MEDIUM");
 
   useEffect(() => {
     if (currentTurn === "o") {
       botTurn();
     }
-  }, [currentTurn, gameMode]);
+  }, [currentTurn]);
 
   useEffect(() => {
     const winner = getWinner(map);
@@ -49,7 +47,7 @@ export default function App() {
 
   const onPress = (rowIndex, columnIndex) => {
     if (map[rowIndex][columnIndex] !== "") {
-      Alert.alert("Posicion ocupada");
+      Alert.alert("Posición ocupada");
       return;
     }
 
@@ -63,7 +61,7 @@ export default function App() {
   };
 
   const getWinner = (winnerMap) => {
-    // Check rows
+    // Checkear filas
     for (let i = 0; i < 3; i++) {
       const isRowXWinning = winnerMap[i].every((cell) => cell === "x");
       const isRowOWinning = winnerMap[i].every((cell) => cell === "o");
@@ -76,7 +74,7 @@ export default function App() {
       }
     }
 
-    // Check columns
+    // Checkear columnas
     for (let col = 0; col < 3; col++) {
       let isColumnXWinner = true;
       let isColumnOWinner = true;
@@ -98,7 +96,7 @@ export default function App() {
       }
     }
 
-    // check diagonals
+    // Checkear diagonales
     let isDiagonal1OWinning = true;
     let isDiagonal1XWinning = true;
     let isDiagonal2OWinning = true;
@@ -139,7 +137,7 @@ export default function App() {
   };
 
   const gameWon = (player) => {
-    Alert.alert( `Jugador ${player} gano`, [
+    Alert.alert(`Bien`, `Jugador ${player} gano`, [
       {
         text: "Reiniciar",
         onPress: resetGame,
@@ -149,15 +147,15 @@ export default function App() {
 
   const resetGame = () => {
     setMap([
-      ["", "", ""], // 1st row
-      ["", "", ""], // 2nd row
-      ["", "", ""], // 3rd row
+      ["", "", ""], // 1er fila
+      ["", "", ""], // 2da fila
+      ["", "", ""], // 3er fila
     ]);
     setCurrentTurn("x");
   };
 
   const botTurn = () => {
-    // collect all possible options
+    // Mirar todas las opciones posibles
     const possiblePositions = [];
     map.forEach((row, rowIndex) => {
       row.forEach((cell, columnIndex) => {
@@ -169,38 +167,7 @@ export default function App() {
 
     let chosenOption;
 
-    if (gameMode === "BOT_MEDIUM") {
-      // Attack
-      possiblePositions.forEach((possiblePosition) => {
-        const mapCopy = copyArray(map);
-
-        mapCopy[possiblePosition.row][possiblePosition.col] = "o";
-
-        const winner = getWinner(mapCopy);
-        if (winner === "o") {
-          // Attack that position
-          chosenOption = possiblePosition;
-        }
-      });
-
-      if (!chosenOption) {
-        // Defend
-        // Check if the opponent WINS if it takes one of the possible Positions
-        possiblePositions.forEach((possiblePosition) => {
-          const mapCopy = copyArray(map);
-
-          mapCopy[possiblePosition.row][possiblePosition.col] = "x";
-
-          const winner = getWinner(mapCopy);
-          if (winner === "x") {
-            // Defend that position
-            chosenOption = possiblePosition;
-          }
-        });
-      }
-    }
-
-    // choose random
+    // Elegir random
     if (!chosenOption) {
       chosenOption =
         possiblePositions[Math.floor(Math.random() * possiblePositions.length)];
@@ -222,7 +189,7 @@ export default function App() {
             top: 50,
           }}
         >
-          Turno Actualidad: {currentTurn.toUpperCase()}
+          Turno Actual: {currentTurn.toUpperCase()}
         </Text>
         <View style={styles.map}>
           {map.map((row, rowIndex) => (
@@ -237,7 +204,6 @@ export default function App() {
             </View>
           ))}
         </View>
-
       </ImageBackground>
 
       <StatusBar style="auto" />
