@@ -129,7 +129,7 @@ export default function App() {
 
   const checkTieState = () => {
     if (!map.some((row) => row.some((cell) => cell === ""))) {
-      Alert.alert(`It's a tie`, `tie`, [
+      Alert.alert(`Es un empate`, `Empate`, [
         {
           text: "Reiniciar",
           onPress: resetGame,
